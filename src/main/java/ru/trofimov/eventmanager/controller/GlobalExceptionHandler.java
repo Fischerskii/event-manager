@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(serverError);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(serverError);
     }
 
     private static String constructMethodArgumentNotValidMessage(MethodArgumentNotValidException e) {

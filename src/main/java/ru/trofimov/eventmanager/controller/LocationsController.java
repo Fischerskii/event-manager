@@ -40,7 +40,7 @@ public class LocationsController {
     }
 
     @PostMapping
-    public ResponseEntity<LocationDTO> createLocation(@RequestBody LocationDTO locationDTO) {
+    public ResponseEntity<LocationDTO> createLocation(@Valid @RequestBody LocationDTO locationDTO) {
         log.info("Post request for create location: {}", locationDTO);
 
         Location location = locationService.createLocation(locationDTOMapper.toDomain(locationDTO));
