@@ -3,15 +3,13 @@ package ru.trofimov.eventmanager.controller;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.trofimov.eventmanager.dto.LocationDTO;
 import ru.trofimov.eventmanager.mapper.LocationDTOMapper;
 import ru.trofimov.eventmanager.model.Location;
 import ru.trofimov.eventmanager.service.LocationService;
-import ru.trofimov.eventmanager.dto.LocationDTO;
-import ru.trofimov.eventmanager.validation.LocationSearchFilter;
 
 import java.util.List;
 
@@ -24,7 +22,6 @@ public class LocationsController {
     private final LocationService locationService;
     private final LocationDTOMapper locationDTOMapper;
 
-    @Autowired
     public LocationsController(LocationService locationService,
                                LocationDTOMapper locationDTOMapper) {
         this.locationService = locationService;
@@ -32,9 +29,9 @@ public class LocationsController {
     }
 
     @GetMapping
-    public List<LocationDTO> getLocations(@Valid LocationSearchFilter locationSearchFilter) {
+    public List<LocationDTO> getLocations() {
         log.info("Get all locations");
-        return locationService.getAllLocations(locationSearchFilter).stream()
+        return locationService.getAllLocations().stream()
                 .map(locationDTOMapper::toDto)
                 .toList();
     }
@@ -51,27 +48,30 @@ public class LocationsController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<LocationDTO> deleteById(@PathVariable("id") Long id) {
         log.info("Delete location: {}", id);
-        locationService.deleteLocation(id);
-
-        return ResponseEntity.noContent().build();
+        Location deleteLocation = locationService.deleteLocation(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(locationDTOMapper.toDto(deleteLocation));
     }
 
-    @GetMapping("{id}")
-    public LocationDTO getLocationById(@PathVariable("id") Long id) {
-        log.info("Get location by id: {}", id);
-        Location location = locationService.findById(id);
+    @GetMapping("{locationId}")
+    public LocationDTO getLocationById(@PathVariable("locationId") Long locationId) {
+        log.info("Get location by id: {}", locationId);
+        Location location = locationService.findById(locationId);
         return locationDTOMapper.toDto(location);
     }
 
-    @PutMapping("{id}")
-    public LocationDTO updateLocation(@PathVariable("id") Long id,
-                                      @RequestBody @Valid LocationDTO locationDTO) {
+    @PutMapping("{locationId}")
+    public ResponseEntity<LocationDTO> updateLocation(@PathVariable("locationId") Long locationId,
+                                                      @RequestBody @Valid LocationDTO locationDTO) {
         log.info("Update location: {}", locationDTO);
-        Location updatedLocation = locationService.updateLocation(id, locationDTOMapper.toDomain(locationDTO));
+        Location updatedLocation = locationService.updateLocation(locationId, locationDTOMapper.toDomain(locationDTO));
 
-        return locationDTOMapper.toDto(updatedLocation);
+        return ResponseEntity.ok(
+                locationDTOMapper
+                        .toDto(updatedLocation));
     }
 
 }

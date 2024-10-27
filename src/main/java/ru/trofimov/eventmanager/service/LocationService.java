@@ -2,13 +2,11 @@ package ru.trofimov.eventmanager.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.trofimov.eventmanager.entity.LocationEntity;
 import ru.trofimov.eventmanager.mapper.LocationEntityMapper;
 import ru.trofimov.eventmanager.model.Location;
 import ru.trofimov.eventmanager.repository.LocationRepository;
-import ru.trofimov.eventmanager.validation.LocationSearchFilter;
 
 import java.util.List;
 
@@ -37,29 +35,20 @@ public class LocationService {
                 );
     }
 
-    public List<Location> getAllLocations(LocationSearchFilter locationSearchFilter) {
-        int pageNumber = locationSearchFilter.pageNumber() != null ?
-                locationSearchFilter.pageNumber() : 0;
-
-        int pageSize = locationSearchFilter.pageSize() != null ?
-                locationSearchFilter.pageSize() : 7;
-
-        Pageable pageable = Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber);
-
-
-        return locationRepository.findAllLocations(pageable).stream()
+    public List<Location> getAllLocations() {
+        return locationRepository.findAll().stream()
                 .map(locationEntityMapper::toDomain)
                 .toList();
     }
 
-    public void deleteLocation(Long id) {
+    public Location deleteLocation(Long id) {
         if (!locationRepository.existsById(id)) {
             throw new EntityNotFoundException("Not found location by id: %s".formatted(id));
         }
 
-        locationRepository.deleteById(id);
+        return locationEntityMapper.toDomain(
+                locationRepository.deleteByIdAndReturnLocation(id)
+        );
     }
 
     public Location findById(Long id) {
@@ -70,18 +59,18 @@ public class LocationService {
     }
 
     public Location updateLocation(Long id, Location location) {
-        if (!locationRepository.existsById(id)) {
-            throw new EntityNotFoundException("Not found location by id: %s".formatted(id));
+        Location locationForUpdate = findById(id);
+
+        if (location.capacity() < locationForUpdate.capacity()) {
+            throw new IllegalArgumentException("Location capacity cannot be reduced");
         }
 
-        locationRepository.updateLocation(
+        return new Location(
                 id,
                 location.name(),
                 location.address(),
                 location.capacity(),
                 location.description()
         );
-
-        return findById(id);
     }
 }
