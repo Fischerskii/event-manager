@@ -59,18 +59,17 @@ public class LocationService {
     }
 
     public Location updateLocation(Long id, Location location) {
-        Location locationForUpdate = findById(id);
+        LocationEntity locationEntity = locationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Not found location by id: %s".formatted(id)));
 
-        if (location.capacity() < locationForUpdate.capacity()) {
+        if (location.capacity() < locationEntity.getCapacity()) {
             throw new IllegalArgumentException("Location capacity cannot be reduced");
         }
 
-        return new Location(
-                id,
-                location.name(),
-                location.address(),
-                location.capacity(),
-                location.description()
-        );
+        locationEntity.setName(location.name());
+        locationEntity.setAddress(location.address());
+        locationEntity.setCapacity(location.capacity());
+        locationEntity.setDescription(location.description());
+        return locationEntityMapper.toDomain(locationRepository.save(locationEntity));
     }
 }
