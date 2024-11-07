@@ -1,7 +1,6 @@
 package ru.trofimov.eventmanager.sequrity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -11,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import ru.trofimov.eventmanager.dto.ServerErrorDTO;
+import ru.trofimov.eventmanager.dto.ErrorDTO;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -30,10 +29,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+                         AuthenticationException authException) throws IOException {
         log.error("Handling authentication exception", authException);
-        ServerErrorDTO responseMessage = new ServerErrorDTO(
-                "Failed to authenticate",
+        ErrorDTO responseMessage = new ErrorDTO(
+                "Необходима аутентификация",
                 authException.getMessage(),
                 LocalDateTime.now()
         );

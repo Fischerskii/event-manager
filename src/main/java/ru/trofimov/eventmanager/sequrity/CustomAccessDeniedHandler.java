@@ -1,7 +1,6 @@
 package ru.trofimov.eventmanager.sequrity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -11,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import ru.trofimov.eventmanager.dto.ServerErrorDTO;
+import ru.trofimov.eventmanager.dto.ErrorDTO;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -31,10 +30,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException accessDeniedException
-    ) throws IOException, ServletException {
+    ) throws IOException {
         log.error("Handling access denied", accessDeniedException);
-        ServerErrorDTO messageResponse = new ServerErrorDTO(
-                "Forbidden",
+        ErrorDTO messageResponse = new ErrorDTO(
+                "Недостаточно прав для выполнения операции",
                 accessDeniedException.getMessage(),
                 LocalDateTime.now()
         );

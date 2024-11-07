@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
         log.error("Got exception", e);
 
         ErrorMessageResponse entityNotFound = new ErrorMessageResponse(
-                "Entity not found",
+                "Сущность не найдена",
                 e.getMessage(),
                 LocalDateTime.now()
         );
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                 : e.getMessage();
 
         ErrorMessageResponse validationException = new ErrorMessageResponse(
-                "Validation exception",
+                "Некорректный запрос",
                 detailedMessage,
                 LocalDateTime.now()
         );
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
         log.error("Got exception", e);
 
         ErrorMessageResponse serverError = new ErrorMessageResponse(
-                "Server error",
+                "Внутренняя ошибка сервера",
                 e.getMessage(),
                 LocalDateTime.now()
         );
