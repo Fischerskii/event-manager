@@ -1,4 +1,4 @@
-package ru.trofimov.eventmanager.controller;
+package ru.trofimov.eventmanager.errors;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.trofimov.eventmanager.errors.ErrorMessageResponse;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;

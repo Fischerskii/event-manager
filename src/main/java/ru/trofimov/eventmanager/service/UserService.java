@@ -31,7 +31,7 @@ public class UserService {
         }
 
         String hashedPass = passwordEncoder.encode(signUpRequest.password());
-        UserEntity userEntity = new UserEntity(
+        User user = new User(
                 null,
                 signUpRequest.login(),
                 hashedPass,
@@ -39,7 +39,7 @@ public class UserService {
                 Role.USER
         );
 
-        UserEntity savedUser = userRepository.save(userEntity);
+        UserEntity savedUser = userRepository.save(userEntityMapper.toEntity(user));
         return userEntityMapper.toDomain(savedUser);
     }
 

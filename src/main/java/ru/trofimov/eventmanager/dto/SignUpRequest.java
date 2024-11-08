@@ -1,9 +1,6 @@
 package ru.trofimov.eventmanager.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record SignUpRequest(
 
@@ -16,7 +13,7 @@ public record SignUpRequest(
         String password,
 
         @NotNull
-        @Positive(message = "Age cannot be less than 0")
+        @Min(value = 18, message = "Age cannot be less than 18")
         Integer age
 ) {
 }

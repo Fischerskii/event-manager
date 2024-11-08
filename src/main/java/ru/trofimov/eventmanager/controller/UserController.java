@@ -26,7 +26,6 @@ public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
     public UserController(UserService userService,
                           AuthenticationService authenticationService,
                           UserDTOMapper userDTOMapper) {
@@ -42,7 +41,7 @@ public class UserController {
         User user = userService.registerUser(signUpRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new UserDTO(user.id(), user.login(), user.age(), user.role()));
+                .body(userDTOMapper.toDTO(user));
     }
 
     @PostMapping("/auth")

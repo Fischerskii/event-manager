@@ -1,6 +1,5 @@
 package ru.trofimov.eventmanager.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,64 +9,54 @@ import ru.trofimov.eventmanager.mapper.UserEntityMapper;
 import ru.trofimov.eventmanager.model.User;
 import ru.trofimov.eventmanager.repository.UserRepository;
 
-import java.util.List;
-
 @Service
 public class DefaultUserInitializerService {
 
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
     private final PasswordEncoder passwordEncoder;
-
-    @Value("${default.admin.login}")
-    String adminLogin;
-    @Value("${default.admin.password}")
-    String adminPassword;
-    @Value("${default.admin.age}")
-    Integer adminAge;
-    @Value("${default.user.login}")
-    String userLogin;
-    @Value("${default.user.password}")
-    String userPassword;
-    @Value("${default.user.age}")
-    Integer userAge;
+    private final DefaultUserParameters defaultUserParameters;
 
     public DefaultUserInitializerService(UserRepository userRepository,
                                          UserEntityMapper userEntityMapper,
-                                         PasswordEncoder passwordEncoder) {
+                                         PasswordEncoder passwordEncoder,
+                                         DefaultUserParameters defaultUserParameters) {
         this.userRepository = userRepository;
         this.userEntityMapper = userEntityMapper;
         this.passwordEncoder = passwordEncoder;
+        this.defaultUserParameters = defaultUserParameters;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void onContextStarted() {
-        if (!userRepository.existsByLogin(adminLogin) && !userRepository.existsByLogin(userLogin)) {
-            String encodedAdminPassword = passwordEncoder.encode(adminPassword);
-            String encodedUserPassword = passwordEncoder.encode(userPassword);
+        createDefaultUser(
+                defaultUserParameters.getAdmin().getLogin(),
+                defaultUserParameters.getAdmin().getPassword(),
+                defaultUserParameters.getAdmin().getAge(),
+                Role.ADMIN
+        );
 
-            User defaultAdmin = new User(
-                    null,
-                    adminLogin,
-                    encodedAdminPassword,
-                    adminAge,
-                    Role.ADMIN
-            );
+        createDefaultUser(
+                defaultUserParameters.getUser().getLogin(),
+                defaultUserParameters.getUser().getPassword(),
+                defaultUserParameters.getUser().getAge(),
+                Role.USER
+        );
+    }
+
+    private void createDefaultUser(String login, String password, int age, Role role) {
+        if (!userRepository.existsByLogin(login)) {
+            String encodedPassword = passwordEncoder.encode(password);
 
             User defaultUser = new User(
                     null,
-                    userLogin,
-                    encodedUserPassword,
-                    userAge,
-                    Role.USER
+                    login,
+                    encodedPassword,
+                    age,
+                    role
             );
 
-            userRepository.saveAll(
-                    List.of(
-                            userEntityMapper.toEntity(defaultUser),
-                            userEntityMapper.toEntity(defaultAdmin)
-                    )
-            );
+            userRepository.save(userEntityMapper.toEntity(defaultUser));
         }
     }
 }
