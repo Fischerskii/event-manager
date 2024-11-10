@@ -29,34 +29,33 @@ public class DefaultUserInitializerService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onContextStarted() {
-        createDefaultUser(
+
+        String adminEncodedPassword = passwordEncoder.encode(defaultUserParameters.getAdmin().getPassword());
+        String userEncodedPassword = passwordEncoder.encode(defaultUserParameters.getUser().getPassword());
+
+        User defaultAdmin = new User(
+                null,
                 defaultUserParameters.getAdmin().getLogin(),
-                defaultUserParameters.getAdmin().getPassword(),
+                adminEncodedPassword,
                 defaultUserParameters.getAdmin().getAge(),
                 Role.ADMIN
         );
 
-        createDefaultUser(
+        User defaultUser = new User(
+                null,
                 defaultUserParameters.getUser().getLogin(),
-                defaultUserParameters.getUser().getPassword(),
+                userEncodedPassword,
                 defaultUserParameters.getUser().getAge(),
                 Role.USER
         );
+
+        createDefaultUser(defaultAdmin);
+        createDefaultUser(defaultUser);
     }
 
-    private void createDefaultUser(String login, String password, int age, Role role) {
-        if (!userRepository.existsByLogin(login)) {
-            String encodedPassword = passwordEncoder.encode(password);
-
-            User defaultUser = new User(
-                    null,
-                    login,
-                    encodedPassword,
-                    age,
-                    role
-            );
-
-            userRepository.save(userEntityMapper.toEntity(defaultUser));
+    private void createDefaultUser(User user) {
+        if (!userRepository.existsByLogin(user.login())) {
+            userRepository.save(userEntityMapper.toEntity(user));
         }
     }
 }

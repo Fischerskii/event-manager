@@ -1,7 +1,6 @@
 package ru.trofimov.eventmanager.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.trofimov.eventmanager.dto.SignUpRequest;
@@ -18,7 +17,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserEntityMapper userEntityMapper;
 
-    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserEntityMapper userEntityMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
