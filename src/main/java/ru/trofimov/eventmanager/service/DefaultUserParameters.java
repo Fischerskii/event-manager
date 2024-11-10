@@ -2,7 +2,6 @@ package ru.trofimov.eventmanager.service;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import ru.trofimov.eventmanager.enums.Role;
 
 @Component
 @ConfigurationProperties(prefix = "default")
@@ -23,7 +22,7 @@ public class DefaultUserParameters {
         private String login;
         private String password;
         private int age;
-        private Role role;
+        private String role;
 
         public String getLogin() {
             return login;
@@ -49,11 +48,11 @@ public class DefaultUserParameters {
             this.age = age;
         }
 
-        public Role getRole() {
+        public String getRole() {
             return role;
         }
 
-        public void setRole(Role role) {
+        public void setRole(String role) {
             this.role = role;
         }
     }
