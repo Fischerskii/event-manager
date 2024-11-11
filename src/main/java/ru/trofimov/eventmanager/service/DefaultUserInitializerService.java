@@ -5,6 +5,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.trofimov.eventmanager.mapper.UserEntityMapper;
+import ru.trofimov.eventmanager.model.User;
 import ru.trofimov.eventmanager.repository.UserRepository;
 
 @Service
@@ -28,8 +29,8 @@ public class DefaultUserInitializerService {
     @EventListener(ApplicationReadyEvent.class)
     public void onContextStarted() {
 
-        DefaultUserParameters.User defaultAdmin = defaultUserParameters.getAdmin();
-        DefaultUserParameters.User defaultUser = defaultUserParameters.getUser();
+        User defaultAdmin = defaultUserParameters.getAdmin();
+        User defaultUser = defaultUserParameters.getUser();
 
         String adminEncodedPassword = passwordEncoder.encode(defaultUserParameters.getAdmin().getPassword());
         String userEncodedPassword = passwordEncoder.encode(defaultUserParameters.getUser().getPassword());
@@ -41,7 +42,7 @@ public class DefaultUserInitializerService {
         createDefaultUser(defaultUser);
     }
 
-    private void createDefaultUser(DefaultUserParameters.User user) {
+    private void createDefaultUser(User user) {
         if (!userRepository.existsByLogin(user.getLogin())) {
             userRepository.save(userEntityMapper.toEntity(user));
         }
