@@ -1,4 +1,4 @@
-package ru.trofimov.eventmanager;
+package ru.trofimov.eventmanager.errors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

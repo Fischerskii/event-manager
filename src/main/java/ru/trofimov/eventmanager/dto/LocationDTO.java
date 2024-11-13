@@ -3,10 +3,14 @@ package ru.trofimov.eventmanager.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record LocationDTO (
+
+        @Null
+        Long id,
 
         @Size(message = "The name must contain more than 3 characters", min = 3) 
         @NotBlank(message = "Name cannot be empty") 
