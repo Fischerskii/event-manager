@@ -2,20 +2,14 @@ package ru.trofimov.eventmanager.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.trofimov.eventmanager.dto.EventUpdateRequestDTO;
 import ru.trofimov.eventmanager.entity.EventEntity;
-import ru.trofimov.eventmanager.mapper.EventDtoMapper;
 import ru.trofimov.eventmanager.mapper.EventEntityMapper;
 import ru.trofimov.eventmanager.model.Event;
 import ru.trofimov.eventmanager.model.EventFilter;
 import ru.trofimov.eventmanager.model.Location;
 import ru.trofimov.eventmanager.repository.EventRepository;
-import ru.trofimov.eventmanager.repository.LocationRepository;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class EventService {
@@ -23,16 +17,11 @@ public class EventService {
     private final EventRepository eventRepository;
     private final LocationService locationService;
     private final EventEntityMapper eventEntityMapper;
-    private final LocationRepository locationRepository;
-    private final EventDtoMapper eventDtoMapper;
-    private EventFilter eventFilter;
 
-    public EventService(EventRepository eventRepository, LocationService locationService, EventEntityMapper eventEntityMapper, LocationRepository locationRepository, EventDtoMapper eventDtoMapper) {
+    public EventService(EventRepository eventRepository, LocationService locationService, EventEntityMapper eventEntityMapper) {
         this.eventRepository = eventRepository;
         this.locationService = locationService;
         this.eventEntityMapper = eventEntityMapper;
-        this.locationRepository = locationRepository;
-        this.eventDtoMapper = eventDtoMapper;
     }
 
     public Event createEvent(Event event) {
