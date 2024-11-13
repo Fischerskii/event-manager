@@ -10,8 +10,8 @@ public class EventSearchRequestDTO {
     String name;
     Integer placesMin;
     Integer placesMax;
-    LocalDateTime dateStartAfter;
     LocalDateTime dateStartBefore;
+    LocalDateTime dateStartAfter;
     BigDecimal costMin;
     BigDecimal costMax;
     Integer durationMin;

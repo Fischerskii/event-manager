@@ -16,6 +16,7 @@ public class EventCreateRequestDTO {
     Integer maxPlaces;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @FutureOrPresent(message = "Date and time must be in the future or the present moment")
     LocalDateTime date;
 
     @PositiveOrZero(message = "Cost cannot be a positive number")

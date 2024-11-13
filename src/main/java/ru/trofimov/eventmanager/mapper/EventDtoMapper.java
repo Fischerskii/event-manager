@@ -4,19 +4,24 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import ru.trofimov.eventmanager.dto.EventCreateRequestDTO;
+import ru.trofimov.eventmanager.dto.EventDTO;
+import ru.trofimov.eventmanager.dto.EventSearchRequestDTO;
 import ru.trofimov.eventmanager.dto.EventUpdateRequestDTO;
 import ru.trofimov.eventmanager.model.Event;
+import ru.trofimov.eventmanager.model.EventFilter;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface EventDtoMapper {
 
-    EventCreateRequestDTO toCreateDto(Event event);
-    EventUpdateRequestDTO toUpdateDto(Event event);
+    EventDTO toDTO(Event event);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ownerId", ignore = true)
     @Mapping(target = "occupiedPlaces", ignore = true)
     @Mapping(target = "status", ignore = true)
     Event toDomain(EventCreateRequestDTO eventDto);
+
     Event toDomain(EventUpdateRequestDTO eventDto);
+
+    EventFilter toDomain(EventSearchRequestDTO eventDto);
 }
