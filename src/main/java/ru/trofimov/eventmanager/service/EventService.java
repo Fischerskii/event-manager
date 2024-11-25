@@ -12,7 +12,6 @@ import ru.trofimov.eventmanager.repository.EventRepository;
 import ru.trofimov.eventmanager.util.AuthorizationHeaderUtil;
 
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
