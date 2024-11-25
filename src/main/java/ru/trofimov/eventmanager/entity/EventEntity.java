@@ -5,6 +5,7 @@ import ru.trofimov.eventmanager.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -14,52 +15,59 @@ public class EventEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "owner_id")
     private String ownerId;
 
     @Column(name = "max_places")
-    Integer maxPlaces;
+    private Integer maxPlaces;
 
     @Column(name = "occupied_places")
     Integer occupiedPlaces;
 
+    @OneToMany(mappedBy = "event")
+    private List<RegistrationEntity> registrationEntities;
+
     @Column(name = "date")
-    LocalDateTime date;
+    private LocalDateTime date;
 
     @Column(name = "cost")
-    BigDecimal cost;
+    private BigDecimal cost;
 
     @Column(name = "duration")
-    Integer duration;
+    private Integer duration;
 
     @Column(name = "location_id")
-    Long locationId;
+    private Long locationId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    EventStatus status;
+    private EventStatus status;
 
     public EventEntity() {
     }
 
-    public EventEntity(Long id,
-                       String name,
-                       String ownerId,
-                       Integer maxPlaces,
-                       Integer occupiedPlaces,
-                       LocalDateTime date,
-                       BigDecimal cost,
-                       Integer duration,
-                       Long locationId,
-                       EventStatus status) {
+    public EventEntity(
+            Long id,
+            String name,
+            String ownerId,
+            Integer maxPlaces,
+            Integer occupiedPlaces,
+            List<RegistrationEntity> registrationEntities,
+            LocalDateTime date,
+            BigDecimal cost,
+            Integer duration,
+            Long locationId,
+            EventStatus status
+    ) {
         this.id = id;
         this.name = name;
         this.ownerId = ownerId;
         this.maxPlaces = maxPlaces;
         this.occupiedPlaces = occupiedPlaces;
+        this.registrationEntities = registrationEntities;
         this.date = date;
         this.cost = cost;
         this.duration = duration;
@@ -105,6 +113,14 @@ public class EventEntity {
 
     public void setOccupiedPlaces(Integer occupiedPlaces) {
         this.occupiedPlaces = occupiedPlaces;
+    }
+
+    public List<RegistrationEntity> getRegistrationEntities() {
+        return registrationEntities;
+    }
+
+    public void setRegistrationEntities(List<RegistrationEntity> registrationEntities) {
+        this.registrationEntities = registrationEntities;
     }
 
     public LocalDateTime getDate() {

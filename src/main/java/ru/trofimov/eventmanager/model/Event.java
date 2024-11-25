@@ -17,4 +17,17 @@ public record Event (
         Long locationId,
         EventStatus status
 ) {
+    public Event withUserId(Long userId) {
+        return new Event(id,
+                name,
+                userId.toString(),
+                maxPlaces,
+                occupiedPlaces,
+                date,
+                cost,
+                duration,
+                locationId,
+                status
+                );
+    }
 }

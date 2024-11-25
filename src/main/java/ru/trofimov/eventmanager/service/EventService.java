@@ -7,9 +7,16 @@ import ru.trofimov.eventmanager.mapper.EventEntityMapper;
 import ru.trofimov.eventmanager.model.Event;
 import ru.trofimov.eventmanager.model.EventFilter;
 import ru.trofimov.eventmanager.model.Location;
+import ru.trofimov.eventmanager.model.User;
 import ru.trofimov.eventmanager.repository.EventRepository;
+import ru.trofimov.eventmanager.util.AuthorizationHeaderUtil;
 
+import java.lang.reflect.Field;
+import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -17,15 +24,24 @@ public class EventService {
     private final EventRepository eventRepository;
     private final LocationService locationService;
     private final EventEntityMapper eventEntityMapper;
+    private final AuthorizationHeaderUtil authorizationHeaderUtil;
 
-    public EventService(EventRepository eventRepository, LocationService locationService, EventEntityMapper eventEntityMapper) {
+    public EventService(EventRepository eventRepository,
+                        LocationService locationService,
+                        EventEntityMapper eventEntityMapper,
+                        AuthorizationHeaderUtil authorizationHeaderUtil) {
         this.eventRepository = eventRepository;
         this.locationService = locationService;
         this.eventEntityMapper = eventEntityMapper;
+        this.authorizationHeaderUtil = authorizationHeaderUtil;
     }
 
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event, String authorizationHeader) {
         Location location = locationService.findById(event.locationId());
+        User creatorUser = authorizationHeaderUtil.extractUserFromAuthorizationHeader(authorizationHeader);
+        Long userId = creatorUser.getId();
+
+         event = event.withUserId(userId);
 
         validateEventCapacity(event, location);
 
@@ -60,7 +76,7 @@ public class EventService {
         validateEventCapacity(eventToUpdate, location);
 
 
-        if (eventToUpdate.maxPlaces() > currentEvent.occupiedPlaces()) {
+        if (eventToUpdate.maxPlaces() < currentEvent.occupiedPlaces()) {
             throw new IllegalArgumentException("The number of available spots for " +
                     "the event cannot be reduced below the number of reserved spots.");
         }
@@ -79,7 +95,25 @@ public class EventService {
 
     public List<Event> searchEvents(EventFilter eventFilter) {
 
-        List<EventEntity> eventsByFilter =  eventRepository.findAllByFilter(
+        Field[] fields = eventFilter.getClass().getDeclaredFields();
+        boolean allFieldsEmpty = Arrays.stream(fields)
+                .peek(field -> field.setAccessible(true))
+                .map(field -> {
+                    try {
+                        return field.get(eventFilter);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .allMatch(Objects::isNull);
+
+        if (allFieldsEmpty) {
+            return eventRepository.findAll().stream()
+                    .map(eventEntityMapper::toDomain)
+                    .toList();
+        }
+
+        List<EventEntity> eventsByFilter = eventRepository.findAllByFilter(
                 eventFilter.name(),
                 eventFilter.placesMin(),
                 eventFilter.placesMax(),
@@ -96,6 +130,17 @@ public class EventService {
         return eventsByFilter.stream()
                 .map(eventEntityMapper::toDomain)
                 .toList();
+    }
+
+    public List<Event> getAllUserCreatedEvents(String authorizationHeader) {
+        User user = authorizationHeaderUtil.extractUserFromAuthorizationHeader(authorizationHeader);
+        Long userId = user.getId();
+
+        List<EventEntity> currentUserEvents = eventRepository.findAllByUserId(userId);
+
+        return currentUserEvents.stream()
+                .map(eventEntityMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     private static void validateEventCapacity(Event event, Location location) {

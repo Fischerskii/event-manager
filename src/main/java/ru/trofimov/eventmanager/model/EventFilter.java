@@ -15,7 +15,7 @@ public record EventFilter(
         BigDecimal costMax,
         Integer durationMin,
         Integer durationMax,
-        Integer locationId,
+        Long locationId,
         EventStatus status
 ) {
 }

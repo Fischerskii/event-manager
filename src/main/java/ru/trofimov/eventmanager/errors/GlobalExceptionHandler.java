@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorMessageResponse> handleNotFoundException(EntityNotFoundException e) {
-        log.error("Got exception", e);
+        log.error("Global. Entity not found exception handler", e);
 
         ErrorMessageResponse entityNotFound = new ErrorMessageResponse(
                 "Сущность не найдена",
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
             IllegalArgumentException.class
     })
     public ResponseEntity<ErrorMessageResponse> handleValidationException(Exception e) {
-        log.error("Got exception", e);
+        log.error("Global. Method argument not valid exception or Illegal argument exception handler", e);
 
         String detailedMessage = e instanceof MethodArgumentNotValidException
                 ? constructMethodArgumentNotValidMessage((MethodArgumentNotValidException) e)
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorMessageResponse> handleNotFoundException(Exception e) {
-        log.error("Got exception", e);
+        log.error("Global. All other exception handler", e);
 
         ErrorMessageResponse serverError = new ErrorMessageResponse(
                 "Внутренняя ошибка сервера",

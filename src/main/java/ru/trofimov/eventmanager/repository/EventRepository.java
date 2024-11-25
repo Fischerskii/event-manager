@@ -1,32 +1,64 @@
 package ru.trofimov.eventmanager.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.trofimov.eventmanager.entity.EventEntity;
 import ru.trofimov.eventmanager.enums.EventStatus;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
-
-    @Modifying
-    @Transactional
     @Query("""
-            UPDATE EventEntity e
-            SET e.name = :name,
-            e.maxPlaces = :maxPlaces,
-            e.date = :date,
-            e.cost = :cost,
-            e.duration = :duration,
-            e.locationId = :locationId
-            WHERE e.id = :id
+                SELECT e FROM EventEntity e
+                WHERE (:name IS NULL OR e.name = :name)
+                AND (:placesMin IS NULL OR e.maxPlaces >= :placesMin)
+                AND (:placesMax IS NULL OR e.maxPlaces <= :placesMax)
+                AND (cast(:dateStartAfter as timestamp ) IS NULL OR e.date >= :dateStartAfter)
+                AND (cast(:dateStartBefore as timestamp ) IS NULL OR e.date <= :dateStartBefore)
+                AND (:costMin IS NULL OR e.cost >= :costMin)
+                AND (:costMax IS NULL OR e.cost <= :costMax)
+                AND (:durationMin IS NULL OR e.duration >= :durationMin)
+                AND (:durationMax IS NULL OR e.duration <= :durationMax)
+                AND (:locationId IS NULL OR e.locationId = :locationId)
+                AND (:status IS NULL OR e.status = :status)
             """)
+    List<EventEntity> findAllByFilter(
+            @Param("name") String name,
+            @Param("placesMin") Integer placesMin,
+            @Param("placesMax") Integer placesMax,
+            @Param("dateStartBefore") LocalDateTime dateStartBefore,
+            @Param("dateStartAfter") LocalDateTime dateStartAfter,
+            @Param("costMin") BigDecimal costMin,
+            @Param("costMax") BigDecimal costMax,
+            @Param("durationMin") Integer durationMin,
+            @Param("durationMax") Integer durationMax,
+            @Param("locationId") Long locationId,
+            @Param("status") EventStatus status
+    );
+
+
+    @Transactional
+    @Query(value = """
+            WITH updated AS (
+            UPDATE events
+            SET name = :name,
+            max_places = :maxPlaces,
+            date = :date,
+            cost = :cost,
+            duration = :duration,
+            location_id = :locationId
+            WHERE id = :id
+                        RETURNING *
+            )
+                        SELECT * FROM updated
+            """, nativeQuery = true)
     EventEntity updateEvent(Long id,
                             String name,
                             Integer maxPlaces,
@@ -37,26 +69,8 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
     );
 
     @Query("""
-                SELECT e FROM EventEntity e
-                WHERE e.name = :name
-                AND (e.maxPlaces >= :minPlaces AND e.maxPlaces <= :maxPlaces)
-                AND (e.date >= :minDate AND e.date <= :maxDate)
-                AND (e.cost >= :minCost AND e.cost <= :maxCost)
-                AND (e.duration >= :minDuration AND e.duration <= :maxDuration)
-                AND e.locationId = :locationId
-                AND e.status = :status
+            SELECT e FROM EventEntity e
+            WHERE e.ownerId = :userId
             """)
-    List<EventEntity> findAllByFilter(
-            String name,
-            Integer placesMin,
-            Integer placesMax,
-            LocalDateTime dateStartBefore,
-            LocalDateTime dateStartAfter,
-            BigDecimal costMin,
-            BigDecimal costMax,
-            Integer durationMin,
-            Integer durationMax,
-            Integer locationId,
-            EventStatus status
-    );
+    List<EventEntity> findAllByUserId(Long userId);
 }

@@ -32,10 +32,11 @@ public class EventsController {
     }
 
     @PostMapping
-    public ResponseEntity<EventDTO> createEvent(@RequestBody @Valid EventCreateRequestDTO eventDTO) {
+    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventCreateRequestDTO eventDTO,
+                                                @RequestHeader(value = "Authorization") String authorizationHeader) {
         log.info("Create event: {}", eventDTO);
 
-        Event event = eventService.createEvent(eventDtoMapper.toDomain(eventDTO));
+        Event event = eventService.createEvent(eventDtoMapper.toDomain(eventDTO), authorizationHeader);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(eventDtoMapper.toDTO(event));
@@ -50,7 +51,7 @@ public class EventsController {
     }
 
     @GetMapping("{eventId}")
-    public EventDTO getEventById(@PathVariable Long eventId) {
+    public EventDTO getEventById(@PathVariable("eventId") Long eventId) {
         log.info("Get event: {}", eventId);
 
         Event event = eventService.findById(eventId);
@@ -59,7 +60,7 @@ public class EventsController {
 
     @PutMapping("{eventId}")
     public ResponseEntity<EventDTO> updateEvent(@PathVariable Long eventId,
-                                                @RequestBody @Valid EventUpdateRequestDTO eventDTO) {
+                                                @Valid @RequestBody EventUpdateRequestDTO eventDTO) {
         log.info("Update event: {}", eventDTO);
 
         Event updatedEvent = eventService.updateEvent(
@@ -79,6 +80,17 @@ public class EventsController {
         );
 
         return eventsFoundByFilter.stream()
+                .map(eventDtoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/my")
+    public List<EventDTO> getAllCurrentUserEvents(@RequestHeader(value = "Authorization") String authorizationHeader) {
+        log.info("Get all current user events");
+
+        List<Event> userEvents = eventService.getAllUserCreatedEvents(authorizationHeader);
+
+        return userEvents.stream()
                 .map(eventDtoMapper::toDTO)
                 .collect(Collectors.toList());
     }

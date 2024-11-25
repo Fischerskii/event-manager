@@ -1,6 +1,5 @@
 package ru.trofimov.eventmanager.sequrity;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,17 +22,17 @@ import ru.trofimov.eventmanager.sequrity.jwt.JwtTokenFilter;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtTokenFilter jwtTokenFilter;
 
-    @Autowired
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Autowired
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
-
-    @Autowired
-    private JwtTokenFilter jwtTokenFilter;
+    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomAccessDeniedHandler customAccessDeniedHandler, JwtTokenFilter jwtTokenFilter) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+        this.jwtTokenFilter = jwtTokenFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -61,6 +60,26 @@ public class SecurityConfiguration {
                                 .hasAnyAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/users/auth")
                                 .permitAll()
+
+                                .requestMatchers(HttpMethod.POST, "/events")
+                                .hasAnyAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/events/**")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/events/**")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/events/**")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/events/search")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/events/my")
+                                .hasAnyAuthority("USER")
+
+                                .requestMatchers(HttpMethod.POST, "/events/registrations/**")
+                                .hasAnyAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/events/registrations/cancel/**")
+                                .hasAnyAuthority("USER")
+                                .requestMatchers(HttpMethod.GET, "/events/registrations/my")
+                                .hasAnyAuthority("USER")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception ->
