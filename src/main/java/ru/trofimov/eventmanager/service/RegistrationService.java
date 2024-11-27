@@ -59,7 +59,7 @@ public class RegistrationService {
 
         User user = authorizationHeaderUtil.extractUserFromAuthorizationHeader(authorizationHeader);
 
-        registrationRepository.cancelRegistration(eventId, user.getId());
+        registrationRepository.deleteByEventIdAndUserId(eventId, user.getId());
     }
 
     public List<Event> getUserEvents(String authorizationHeader) {

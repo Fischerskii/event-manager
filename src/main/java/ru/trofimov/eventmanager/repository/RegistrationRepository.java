@@ -15,16 +15,12 @@ public interface RegistrationRepository extends JpaRepository<RegistrationEntity
 
     @Modifying
     @Transactional
-    @Query("""
-            DELETE FROM RegistrationEntity r
-                        WHERE r.userId = :userId
-                                    AND r.event.id = :eventId
-            """)
-    void cancelRegistration(Long eventId, Long userId);
+    void deleteByEventIdAndUserId(Long eventId, Long userId);
+
 
     @Query("""
-                SELECT r.event FROM RegistrationEntity r
-                WHERE r.userId = :userId
-            """)
+                 SELECT r.event FROM RegistrationEntity r
+                 WHERE r.userId = :userId
+             """)
     List<EventEntity> getEventsByUserId(Long userId);
 }

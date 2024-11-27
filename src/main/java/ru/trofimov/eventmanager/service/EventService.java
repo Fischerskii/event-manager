@@ -12,10 +12,7 @@ import ru.trofimov.eventmanager.model.User;
 import ru.trofimov.eventmanager.repository.EventRepository;
 import ru.trofimov.eventmanager.util.AuthorizationHeaderUtil;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,24 +93,6 @@ public class EventService {
 
     public List<Event> searchEvents(EventFilter eventFilter) {
 
-        Field[] fields = eventFilter.getClass().getDeclaredFields();
-        boolean allFieldsEmpty = Arrays.stream(fields)
-                .peek(field -> field.setAccessible(true))
-                .map(field -> {
-                    try {
-                        return field.get(eventFilter);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .allMatch(Objects::isNull);
-
-        if (allFieldsEmpty) {
-            return eventRepository.findAll().stream()
-                    .map(eventEntityMapper::toDomain)
-                    .toList();
-        }
-
         List<EventEntity> eventsByFilter = eventRepository.findAllByFilter(
                 eventFilter.name(),
                 eventFilter.placesMin(),
@@ -137,7 +116,7 @@ public class EventService {
         User user = authorizationHeaderUtil.extractUserFromAuthorizationHeader(authorizationHeader);
         Long userId = user.getId();
 
-        List<EventEntity> currentUserEvents = eventRepository.findAllByUserId(userId);
+        List<EventEntity> currentUserEvents = eventRepository.findByOwnerId(userId.toString());
 
         return currentUserEvents.stream()
                 .map(eventEntityMapper::toDomain)
