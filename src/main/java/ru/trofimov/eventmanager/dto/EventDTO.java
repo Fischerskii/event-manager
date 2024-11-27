@@ -1,7 +1,7 @@
 package ru.trofimov.eventmanager.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.trofimov.eventmanager.enums.EventStatus;
 
 import java.math.BigDecimal;
@@ -25,7 +25,7 @@ public class EventDTO {
     @PositiveOrZero(message = "Occupied places must be a positive number")
     Integer occupiedPlaces;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     LocalDateTime date;
 
     @PositiveOrZero(message = "Cost cannot be a positive number")

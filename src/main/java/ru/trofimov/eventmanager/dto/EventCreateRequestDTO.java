@@ -3,7 +3,6 @@ package ru.trofimov.eventmanager.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,8 +17,7 @@ public class EventCreateRequestDTO {
     @PositiveOrZero(message = "Number of seats must be a positive number")
     private Integer maxPlaces;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     @FutureOrPresent(message = "Date and time must be in the future or the present moment")
     private LocalDateTime date;
 

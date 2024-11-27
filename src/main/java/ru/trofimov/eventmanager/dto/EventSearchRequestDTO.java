@@ -1,7 +1,7 @@
 package ru.trofimov.eventmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.validation.constraints.Digits;
 import ru.trofimov.eventmanager.enums.EventStatus;
 
 import java.math.BigDecimal;
@@ -10,20 +10,26 @@ import java.time.LocalDateTime;
 public class EventSearchRequestDTO {
 
     String name;
+
+    @Digits(integer = 8, fraction = 0, message = "Number of seats must be an integer")
     Integer placesMin;
+
+    @Digits(integer = 8, fraction = 0, message = "Number of seats must be an integer")
     Integer placesMax;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     LocalDateTime dateStartBefore;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     LocalDateTime dateStartAfter;
 
     BigDecimal costMin;
     BigDecimal costMax;
+
+    @Digits(integer = 8, fraction = 0, message = "Number of seats must be an integer")
     Integer durationMin;
+
+    @Digits(integer = 8, fraction = 0, message = "Number of seats must be an integer")
     Integer durationMax;
     Long locationId;
     EventStatus status;

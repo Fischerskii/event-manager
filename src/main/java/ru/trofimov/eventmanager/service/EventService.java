@@ -2,6 +2,7 @@ package ru.trofimov.eventmanager.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.trofimov.eventmanager.entity.EventEntity;
 import ru.trofimov.eventmanager.mapper.EventEntityMapper;
 import ru.trofimov.eventmanager.model.Event;
@@ -35,6 +36,7 @@ public class EventService {
         this.authorizationHeaderUtil = authorizationHeaderUtil;
     }
 
+    @Transactional
     public Event createEvent(Event event, String authorizationHeader) {
         Location location = locationService.findById(event.locationId());
         User creatorUser = authorizationHeaderUtil.extractUserFromAuthorizationHeader(authorizationHeader);
