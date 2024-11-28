@@ -33,7 +33,7 @@ public class EventSchedulerService {
         updateEventStatus(eventsToStart, EventStatus.STARTED);
     }
 
-    @Scheduled(fixedDelayString = "PT15S")
+    @Scheduled(fixedDelayString = "PT12S")
     public void schedulerCheckingEventsForEnd() {
         log.info("Scheduler checking for end events");
 
