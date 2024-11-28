@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -56,6 +55,10 @@ public class AbstractTest {
 
     public int getRandomInt() {
         return secureRandom.nextInt(1000000);
+    }
+
+    public int getRandomInt(int min, int max) {
+        return secureRandom.nextInt(max - min + 1) + min;
     }
 
     public String getAuthorizationHeader(Role role) {
