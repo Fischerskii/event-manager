@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "events")
+@Table(name = "events", indexes = {
+        @Index(name = "idx_date_status", columnList = "date, status")
+})
 public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -68,4 +68,12 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
     );
 
     List<EventEntity> findByOwnerId(String ownerId);
+
+    List<EventEntity> findByDateBeforeAndStatus(LocalDateTime dateBefore, EventStatus status);
+
+    @Query(value = """
+                SELECT * FROM events e
+                WHERE (e.date + INTERVAL '1 minute' * e.duration) <= CURRENT_TIMESTAMP AND e.status = :status
+            """, nativeQuery = true)
+    List<EventEntity> findExpiredEvents(String status);
 }
