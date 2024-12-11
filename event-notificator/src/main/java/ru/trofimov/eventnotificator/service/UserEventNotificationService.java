@@ -25,17 +25,6 @@ public class UserEventNotificationService {
         this.userEventNotificationMapper = userEventNotificationMapper;
     }
 
-//    public void createUserNotifications(Long eventId, List<Long> userIds) {
-//        EventNotificationEntity eventNotification = eventNotificationService.findByEventId(eventId)
-//                .orElseThrow(() -> new IllegalArgumentException("Event notification not found for eventId: " + eventId));
-//
-//        List<UserEventNotificationEntity> userNotifications = userIds.stream()
-//                .map(userId -> new UserEventNotificationEntity(null, userId, eventNotification, false, null))
-//                .toList();
-//
-//        userEventNotificationRepository.saveAll(userNotifications);
-//    }
-
     public List<UserEventNotification> getUnreadUserNotifications(String authorizationHeader) {
         Long userId = getUserIdFromToken(authorizationHeader);
         List<UserEventNotificationEntity> userEventNotificationEntities =
