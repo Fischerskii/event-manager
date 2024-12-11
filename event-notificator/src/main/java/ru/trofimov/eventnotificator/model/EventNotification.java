@@ -10,6 +10,7 @@ public record EventNotification(
         Long eventId,
         Long ownerId,
         Long changedById,
+        LocalDateTime createdDateTime,
         FieldChange<String> name,
         FieldChange<Integer> maxPlaces,
         FieldChange<LocalDateTime> date,

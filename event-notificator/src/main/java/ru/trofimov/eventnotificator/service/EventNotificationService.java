@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.trofimov.eventnotificator.entity.EventNotificationEntity;
 import ru.trofimov.eventnotificator.repository.EventNotificationRepository;
 
+import java.time.LocalDateTime;
+
 @Service
 public class EventNotificationService {
 
@@ -14,6 +16,7 @@ public class EventNotificationService {
     }
 
     public EventNotificationEntity saveNotification(EventNotificationEntity notification) {
+        notification.setCreatedDateTime(LocalDateTime.now());
         return eventNotificationRepository.save(notification);
     }
 }

@@ -6,6 +6,7 @@ import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "event_notifications")
@@ -23,6 +24,12 @@ import java.time.LocalDateTime;
 
     @Column(name = "changed_by_id")
     private Long changedById;
+
+    @OneToMany(mappedBy = "eventNotification", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserEventNotificationEntity> userEventNotifications;
+
+    @Column(name = "created_date_time")
+    private LocalDateTime createdDateTime;
 
     @Embedded
     @AttributeOverrides({
@@ -76,11 +83,25 @@ import java.time.LocalDateTime;
     public EventNotificationEntity() {
     }
 
-    public EventNotificationEntity(Long id, Long eventId, Long ownerId, Long changedById, FieldChange<String> name, FieldChange<Integer> maxPlaces, FieldChange<LocalDateTime> date, FieldChange<BigDecimal> cost, FieldChange<Integer> duration, FieldChange<Long> locationId, FieldChange<EventStatus> status) {
+    public EventNotificationEntity(Long id,
+                                   Long eventId,
+                                   Long ownerId,
+                                   Long changedById,
+                                   List<UserEventNotificationEntity> userEventNotifications,
+                                   LocalDateTime createdDateTime,
+                                   FieldChange<String> name,
+                                   FieldChange<Integer> maxPlaces,
+                                   FieldChange<LocalDateTime> date,
+                                   FieldChange<BigDecimal> cost,
+                                   FieldChange<Integer> duration,
+                                   FieldChange<Long> locationId,
+                                   FieldChange<EventStatus> status) {
         this.id = id;
         this.eventId = eventId;
         this.ownerId = ownerId;
         this.changedById = changedById;
+        this.userEventNotifications = userEventNotifications;
+        this.createdDateTime = createdDateTime;
         this.name = name;
         this.maxPlaces = maxPlaces;
         this.date = date;
@@ -120,6 +141,22 @@ import java.time.LocalDateTime;
 
     public void setChangedById(Long changedById) {
         this.changedById = changedById;
+    }
+
+    public List<UserEventNotificationEntity> getUserEventNotifications() {
+        return userEventNotifications;
+    }
+
+    public void setUserEventNotifications(List<UserEventNotificationEntity> userEventNotifications) {
+        this.userEventNotifications = userEventNotifications;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     public FieldChange<String> getName() {
