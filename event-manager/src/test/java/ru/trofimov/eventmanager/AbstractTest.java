@@ -9,7 +9,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 
 import java.security.SecureRandom;
 

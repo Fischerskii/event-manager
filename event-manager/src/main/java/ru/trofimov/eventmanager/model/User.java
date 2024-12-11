@@ -1,6 +1,6 @@
 package ru.trofimov.eventmanager.model;
 
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 
 public class User {
     private Long id;

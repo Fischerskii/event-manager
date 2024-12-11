@@ -2,7 +2,7 @@ package ru.trofimov.eventmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Digits;
-import ru.trofimov.eventmanager.enums.EventStatus;
+import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -60,12 +60,14 @@ public class EventsController {
 
     @PutMapping("{eventId}")
     public ResponseEntity<EventDTO> updateEvent(@PathVariable Long eventId,
-                                                @Valid @RequestBody EventUpdateRequestDTO eventDTO) {
+                                                @Valid @RequestBody EventUpdateRequestDTO eventDTO,
+                                                @RequestHeader(value = "Authorization") String authorizationHeader) {
         log.info("Update event: {}", eventDTO);
 
         Event updatedEvent = eventService.updateEvent(
                 eventId,
-                eventDtoMapper.toDomain(eventDTO)
+                eventDtoMapper.toDomain(eventDTO),
+                authorizationHeader
         );
 
         return ResponseEntity.ok(eventDtoMapper.toDTO(updatedEvent));

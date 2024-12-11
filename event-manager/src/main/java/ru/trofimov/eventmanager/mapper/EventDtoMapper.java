@@ -18,7 +18,7 @@ public interface EventDtoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ownerId", ignore = true)
     @Mapping(target = "occupiedPlaces", constant = "0")
-    @Mapping(target = "status", expression = "java(ru.trofimov.eventmanager.enums.EventStatus.WAIT_START)")
+    @Mapping(target = "status", expression = "java(ru.trofimov.common.enums.EventStatus.WAIT_START)")
     Event toDomain(EventCreateRequestDTO eventDto);
 
     Event toDomain(EventUpdateRequestDTO eventDto);

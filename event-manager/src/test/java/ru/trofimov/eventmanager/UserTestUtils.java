@@ -3,7 +3,7 @@ package ru.trofimov.eventmanager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.trofimov.eventmanager.entity.UserEntity;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 import ru.trofimov.eventmanager.repository.UserRepository;
 import ru.trofimov.eventmanager.sequrity.jwt.JwtTokenManager;
 
@@ -33,8 +33,8 @@ public class UserTestUtils {
         }
 
         return switch (userRole) {
-            case USER -> jwtTokenManager.generateToken(DEFAULT_USER_LOGIN);
-            case ADMIN -> jwtTokenManager.generateToken(DEFAULT_ADMIN_LOGIN);
+            case USER -> jwtTokenManager.generateToken(DEFAULT_USER_LOGIN, Role.USER);
+            case ADMIN -> jwtTokenManager.generateToken(DEFAULT_ADMIN_LOGIN, Role.ADMIN);
         };
     }
 

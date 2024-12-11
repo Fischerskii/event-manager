@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.trofimov.eventmanager.dto.SignUpRequest;
 import ru.trofimov.eventmanager.entity.UserEntity;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 import ru.trofimov.eventmanager.mapper.UserEntityMapper;
 import ru.trofimov.eventmanager.model.User;
 import ru.trofimov.eventmanager.repository.UserRepository;

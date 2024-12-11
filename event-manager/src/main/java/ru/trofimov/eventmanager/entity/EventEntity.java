@@ -1,7 +1,7 @@
 package ru.trofimov.eventmanager.entity;
 
 import jakarta.persistence.*;
-import ru.trofimov.eventmanager.enums.EventStatus;
+import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,13 +21,13 @@ public class EventEntity {
     private String name;
 
     @Column(name = "owner_id")
-    private String ownerId;
+    private Long ownerId;
 
     @Column(name = "max_places")
     private Integer maxPlaces;
 
     @Column(name = "occupied_places")
-    Integer occupiedPlaces;
+    private Integer occupiedPlaces;
 
     @OneToMany(mappedBy = "event")
     private List<RegistrationEntity> registrationEntities;
@@ -54,7 +54,7 @@ public class EventEntity {
     public EventEntity(
             Long id,
             String name,
-            String ownerId,
+            Long ownerId,
             Integer maxPlaces,
             Integer occupiedPlaces,
             List<RegistrationEntity> registrationEntities,
@@ -93,11 +93,11 @@ public class EventEntity {
         this.name = name;
     }
 
-    public String getOwnerId() {
+    public Long getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
 

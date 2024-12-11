@@ -1,14 +1,17 @@
 package ru.trofimov.eventmanager.model;
 
-import ru.trofimov.eventmanager.enums.EventStatus;
+import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public record Event (
+public record Event(
         Long id,
         String name,
-        String ownerId,
+        Long ownerId,
+        Long changedById,
+        List<Long> participantIds,
         Integer maxPlaces,
         Integer occupiedPlaces,
         LocalDateTime date,
@@ -18,9 +21,12 @@ public record Event (
         EventStatus status
 ) {
     public Event withUserId(Long userId) {
-        return new Event(id,
+        return new Event(
+                id,
                 name,
-                userId.toString(),
+                userId,
+                changedById,
+                participantIds,
                 maxPlaces,
                 occupiedPlaces,
                 date,
@@ -28,6 +34,6 @@ public record Event (
                 duration,
                 locationId,
                 status
-                );
+        );
     }
 }

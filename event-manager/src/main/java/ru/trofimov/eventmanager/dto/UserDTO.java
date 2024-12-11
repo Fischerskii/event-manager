@@ -3,7 +3,7 @@ package ru.trofimov.eventmanager.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 
 public record UserDTO(
 

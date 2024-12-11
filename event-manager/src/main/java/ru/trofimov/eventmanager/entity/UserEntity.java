@@ -1,7 +1,7 @@
 package ru.trofimov.eventmanager.entity;
 
 import jakarta.persistence.*;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 
 @Entity
 @Table(name = "users")

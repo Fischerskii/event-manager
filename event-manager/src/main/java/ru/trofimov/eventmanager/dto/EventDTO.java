@@ -2,7 +2,7 @@ package ru.trofimov.eventmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
-import ru.trofimov.eventmanager.enums.EventStatus;
+import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ public class EventDTO {
     String name;
 
     @NotBlank
-    String ownerId;
+    Long ownerId;
 
     @Digits(integer = 8, fraction = 0, message = "Number of seats must be an integer")
     @PositiveOrZero(message = "Number of seats must be a positive number")
@@ -43,7 +43,7 @@ public class EventDTO {
     public EventDTO() {
     }
 
-    public EventDTO(Long id, String name, String ownerId, Integer maxPlaces, Integer occupiedPlaces, LocalDateTime date, BigDecimal cost, Integer duration, Long locationId, EventStatus status) {
+    public EventDTO(Long id, String name, Long ownerId, Integer maxPlaces, Integer occupiedPlaces, LocalDateTime date, BigDecimal cost, Integer duration, Long locationId, EventStatus status) {
         this.id = id;
         this.name = name;
         this.ownerId = ownerId;
@@ -72,11 +72,11 @@ public class EventDTO {
         this.name = name;
     }
 
-    public String getOwnerId() {
+    public Long getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
 

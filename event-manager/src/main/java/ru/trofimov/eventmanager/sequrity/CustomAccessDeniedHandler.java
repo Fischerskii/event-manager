@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import ru.trofimov.eventmanager.dto.ErrorDTO;
+import ru.trofimov.common.errors.ErrorMessageResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException accessDeniedException
     ) throws IOException {
         log.error("Handling access denied", accessDeniedException);
-        ErrorDTO messageResponse = new ErrorDTO(
+        ErrorMessageResponse messageResponse = new ErrorMessageResponse(
                 "Недостаточно прав для выполнения операции",
                 accessDeniedException.getMessage(),
                 LocalDateTime.now()

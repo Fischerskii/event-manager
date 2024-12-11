@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import ru.trofimov.eventmanager.AbstractTest;
 import ru.trofimov.eventmanager.dto.LocationDTO;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 import ru.trofimov.eventmanager.model.Location;
 import ru.trofimov.eventmanager.repository.LocationRepository;
 import ru.trofimov.eventmanager.service.LocationService;

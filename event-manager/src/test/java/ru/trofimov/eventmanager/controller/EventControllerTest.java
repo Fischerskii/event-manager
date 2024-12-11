@@ -8,10 +8,9 @@ import ru.trofimov.eventmanager.AbstractTest;
 import ru.trofimov.eventmanager.dto.EventCreateRequestDTO;
 import ru.trofimov.eventmanager.dto.EventDTO;
 import ru.trofimov.eventmanager.entity.LocationEntity;
-import ru.trofimov.eventmanager.enums.Role;
+import ru.trofimov.common.enums.Role;
 import ru.trofimov.eventmanager.repository.EventRepository;
 import ru.trofimov.eventmanager.repository.LocationRepository;
-import ru.trofimov.eventmanager.service.EventService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

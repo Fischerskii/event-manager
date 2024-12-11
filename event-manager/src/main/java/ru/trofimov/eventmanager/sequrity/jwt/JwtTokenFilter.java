@@ -6,15 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.trofimov.eventmanager.model.User;
-import ru.trofimov.eventmanager.service.UserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,12 +22,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final static Logger log = LoggerFactory.getLogger(JwtTokenFilter.class);
 
     private final JwtTokenManager jwtTokenManager;
-    private final UserService userService;
 
-    public JwtTokenFilter(JwtTokenManager jwtTokenManager,
-                          @Lazy UserService userService) {
+    public JwtTokenFilter(JwtTokenManager jwtTokenManager) {
         this.jwtTokenManager = jwtTokenManager;
-        this.userService = userService;
     }
 
     @Override
@@ -45,20 +39,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String tokenFromHeader = authorizationHeader.substring(7);
 
         String loginFromToken;
+        String roleFromToken;
         try {
             loginFromToken = jwtTokenManager.getLoginFromToken(tokenFromHeader);
+            roleFromToken = jwtTokenManager.getRoleFromToken(tokenFromHeader);
         } catch (Exception e) {
             log.error("Error while reading jwt token", e);
             filterChain.doFilter(request, response);
             return;
         }
 
-        User user = userService.findByLogin(loginFromToken);
-
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                user,
+                loginFromToken,
                 null,
-                List.of(new SimpleGrantedAuthority(user.getRole().name()))
+                List.of(new SimpleGrantedAuthority(roleFromToken))
         );
 
         SecurityContextHolder.getContext().setAuthentication(token);

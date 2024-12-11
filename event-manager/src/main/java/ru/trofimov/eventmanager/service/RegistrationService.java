@@ -1,8 +1,8 @@
 package ru.trofimov.eventmanager.service;
 
 import org.springframework.stereotype.Service;
+import ru.trofimov.common.enums.EventStatus;
 import ru.trofimov.eventmanager.entity.EventEntity;
-import ru.trofimov.eventmanager.enums.EventStatus;
 import ru.trofimov.eventmanager.mapper.EventEntityMapper;
 import ru.trofimov.eventmanager.mapper.OnEventRegistrationEntityMapper;
 import ru.trofimov.eventmanager.model.Event;

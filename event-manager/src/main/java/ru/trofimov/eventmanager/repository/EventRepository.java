@@ -1,12 +1,13 @@
 package ru.trofimov.eventmanager.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.trofimov.common.enums.EventStatus;
 import ru.trofimov.eventmanager.entity.EventEntity;
-import ru.trofimov.eventmanager.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,30 +45,26 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
 
     @Transactional
+    @Modifying(clearAutomatically = true)
     @Query(value = """
-            WITH updated AS (
-            UPDATE events
-            SET name = :name,
-            max_places = :maxPlaces,
-            date = :date,
-            cost = :cost,
-            duration = :duration,
-            location_id = :locationId
-            WHERE id = :id
-                        RETURNING *
-            )
-                        SELECT * FROM updated
-            """, nativeQuery = true)
-    EventEntity updateEvent(Long id,
+            UPDATE EventEntity e
+            SET e.name = :name,
+                e.maxPlaces = :maxPlaces,
+                e.date = :date,
+                e.cost = :cost,
+                e.duration = :duration,
+                e.locationId = :locationId
+            WHERE e.id = :id
+            """)
+    void updateEvent(Long id,
                             String name,
                             Integer maxPlaces,
                             LocalDateTime date,
                             BigDecimal cost,
                             Integer duration,
-                            Long locationId
-    );
+                            Long locationId);
 
-    List<EventEntity> findByOwnerId(String ownerId);
+    List<EventEntity> findByOwnerId(Long ownerId);
 
     List<EventEntity> findByDateBeforeAndStatus(LocalDateTime dateBefore, EventStatus status);
 

@@ -1,6 +1,6 @@
 package ru.trofimov.eventmanager.model;
 
-import ru.trofimov.eventmanager.enums.EventStatus;
+import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
