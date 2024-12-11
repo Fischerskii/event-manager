@@ -3,9 +3,7 @@ package ru.trofimov.eventnotificator.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_event_notifications", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "event_id"})
-})
+@Table(name = "user_event_notifications")
 public class UserEventNotificationEntity {
 
     @Id

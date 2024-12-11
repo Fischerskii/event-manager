@@ -8,7 +8,6 @@ import ru.trofimov.eventmanager.entity.RegistrationEntity;
 import ru.trofimov.eventmanager.model.Event;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface EventEntityMapper {

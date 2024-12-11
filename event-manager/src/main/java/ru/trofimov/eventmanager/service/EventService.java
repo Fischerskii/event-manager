@@ -1,8 +1,6 @@
 package ru.trofimov.eventmanager.service;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.trofimov.common.dto.EventChangeKafkaMessage;

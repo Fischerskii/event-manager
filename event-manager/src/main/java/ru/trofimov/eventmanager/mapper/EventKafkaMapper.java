@@ -14,13 +14,13 @@ public interface EventKafkaMapper {
     @Mapping(target = "userIds", source = "newEvent.participantIds")
     @Mapping(target = "changedById", ignore = true)
     @Mapping(target = "ownerId", source = "newEvent.ownerId")
-    @Mapping(target = "name", expression = "java(new FieldChange<>(oldEvent.name(), newEvent.name()))")
-    @Mapping(target = "maxPlaces", expression = "java(new FieldChange<>(oldEvent.maxPlaces(), newEvent.maxPlaces()))")
-    @Mapping(target = "date", expression = "java(new FieldChange<>(oldEvent.date(), newEvent.date()))")
-    @Mapping(target = "cost", expression = "java(new FieldChange<>(oldEvent.cost(), newEvent.cost()))")
-    @Mapping(target = "duration", expression = "java(new FieldChange<>(oldEvent.duration(), newEvent.duration()))")
-    @Mapping(target = "locationId", expression = "java(new FieldChange<>(oldEvent.locationId(), newEvent.locationId()))")
-    @Mapping(target = "status", expression = "java(new FieldChange<>(oldEvent.status(), newEvent.status()))")
+    @Mapping(target = "name", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.name(), newEvent.name()))")
+    @Mapping(target = "maxPlaces", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.maxPlaces(), newEvent.maxPlaces()))")
+    @Mapping(target = "date", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.date(), newEvent.date()))")
+    @Mapping(target = "cost", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.cost(), newEvent.cost()))")
+    @Mapping(target = "duration", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.duration(), newEvent.duration()))")
+    @Mapping(target = "locationId", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.locationId(), newEvent.locationId()))")
+    @Mapping(target = "status", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEvent.status(), newEvent.status()))")
     EventChangeKafkaMessage toKafka(Event oldEvent, Event newEvent);
 
     @Mapping(target = "eventId", source = "event.id")
@@ -32,6 +32,6 @@ public interface EventKafkaMapper {
     @Mapping(target = "cost", ignore = true)
     @Mapping(target = "duration", ignore = true)
     @Mapping(target = "locationId", ignore = true)
-    @Mapping(target = "status", expression = "java(new FieldChange<>(oldEventStatus, newEventStatus))")
+    @Mapping(target = "status", expression = "java(new ru.trofimov.common.dto.FieldChange<>(oldEventStatus, newEventStatus))")
     EventChangeKafkaMessage toKafkaChangeStatus(Event event, EventStatus oldEventStatus, EventStatus newEventStatus);
 }

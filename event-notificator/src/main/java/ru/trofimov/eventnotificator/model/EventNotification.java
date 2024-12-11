@@ -5,7 +5,6 @@ import ru.trofimov.common.enums.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record EventNotification(
         Long eventId,

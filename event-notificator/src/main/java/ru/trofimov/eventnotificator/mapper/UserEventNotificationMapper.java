@@ -15,8 +15,6 @@ public interface UserEventNotificationMapper {
     @Mapping(target = "isRead", source = "read")
     UserEventNotification toDomain(UserEventNotificationEntity entity);
 
-//    UserEventNotificationEntity toEntity(UserEventNotification notification);
-
     @Mapping(source = "eventNotification", target = ".")
     EventNotificationDTO toDTO(UserEventNotification notification);
 }
